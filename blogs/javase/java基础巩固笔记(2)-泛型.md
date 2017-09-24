@@ -82,18 +82,20 @@
 ---
 
 ## 自定义泛型方法
-C++模板函数
+
+C++ 模板函数
 
 ```cpp
-template <class T> T add(T x, T y){
+template <class T> T add(T x, T y) {
     return (T)(x+y);
 }
 ```
-    
-而java的泛型基本上完全在编译器中实现，用于编译器执行类型检查和类型判断，然后生成普通的**非泛型**的字节码，这种实现技术为“擦除”(erasure)。
+而 java 的泛型基本上完全在编译器中实现，用于编译器执行类型检查和类型判断，然后生成普通的**非泛型**的字节码，
+这种实现技术为“擦除”(erasure)。
 
 ### "擦除"实例
-泛型是提供给javac编译器使用的，限定集合的输入类型，编译器编译带类型说明的集合时会去掉“类型”信息。
+
+泛型是提供给 javac 编译器使用的，限定集合的输入类型，编译器编译带类型说明的集合时会去掉“类型”信息。
 
 ```java
 public class GenericTest {
@@ -109,7 +111,7 @@ public class GenericTest {
         //两者class类型一样,即字节码一致
         
         System.out.println(collection2.getClass().getName());
-        //class均为java.util.ArrayList,并无实际类型参数信息
+        //class均为java.util.ArrayList, 并无实际类型参数信息
     }
 }
 ```
@@ -124,6 +126,7 @@ java.util.ArrayList
 *使用反射可跳过编译器，往某个泛型集合加入其它类型数据。*
 
 只有引用类型才能作为泛型方法的实际参数
+
 例子：
 
 ```java
@@ -147,6 +150,7 @@ public class GenericTest {
 ```
 
 但注意基本类型**有时**可以作为实参，因为有**自动装箱**和**拆箱**。
+
 例子(编译通过了)：
 
 ```java
@@ -166,7 +170,7 @@ public class GenericTest {
 }
 ```
 
-同时，该例还表明，**当实参不一致时，T取交集，即第一个共同的父类。**
+同时，该例还表明，**当实参不一致时，T 取交集，即第一个共同的父类。**
 另外，如果用`Number b = biggerOne(3,5.5);`改为`String c = biggerOne(3,5.5);`则编译报错:
 
 ```
@@ -179,51 +183,55 @@ Error:(17, 29) java: 不兼容的类型: 推断类型不符合上限
 ![泛型调试截图-1](http://7xph6d.com1.z0.glb.clouddn.com/javaSE_%E6%B3%9B%E5%9E%8B%E8%B0%83%E8%AF%95%E6%88%AA%E5%9B%BE-1.png)
 不知道b为什么是Double类型的（但直接`Double b`接收返回值会编译报错）。不知道跟IDE有没有关系，是不是IDE在debug时会显示这个对象最精确的类型？
 
+哎……这人水平其实不高啊……这是声明，当然要找两者共同的父类，但实际引用指向的地址，是一个 Double 型，完全没有问题！！
 
 ### 类型参数的类型推断
+
 编译器判断泛型方法的实际类型参数的过程称为类型推断。
 
-- 当某个类型变量只在整个参数列表的所有参数和返回值中的**一处被应用**了，那么根据调用方法时该处的实际应用类型来确定。即直接根据调用方法时传递的参数类型或返回值来决定泛型参数的类型。
-例如：
+-   当某个类型变量只在整个参数列表的所有参数和返回值中的**一处被应用**了，
+    那么根据调用方法时该处的实际应用类型来确定。即直接根据调用方法时传递的参数类型或返回值来决定泛型参数的类型。 例如：
 
-`swap(new String[3],1,2)` -> `static <E> void swap(E[]a,int i,int j)`
+    `swap(new String[3],1,2)` -> `static <E> void swap(E[]a,int i,int j)`
 
 - 当某个类型变量在整个参数列表的所有参数和返回值中的**多处被应用**了，如果调用方法时这么多处的实际应用类型都 *对应同一种类型*，则泛型参数的类型就是该类型。
 例如：
 
 `add(3,5)` -> `static <T> T add(T a,T b)`
 
-- 当某个类型变量在整个参数列表的所有参数和返回值中的***多处被应用**了，如果调用方法时这么多处的实际应用类型 *对应不同的类型,且没有返回值*，则取多个参数中的最大交集类型，即第一个公共父类。
-例如：
+-   当某个类型变量在整个参数列表的所有参数和返回值中的***多处被应用**了，如果调用方法时这么多处的实际应用类型 
+    *对应不同的类型,且没有返回值*，则取多个参数中的最大交集类型，即第一个公共父类。 例如：
 
-`fill(new Integer[3],3.5)` -> `static <T> void fill(T a[],T v)`
+    `fill(new Integer[3],3.5)` -> `static <T> void fill(T a[],T v)`
 
-该例子实际对应的类型就是Number,编译通过，运行出问题。
+    该例子实际对应的类型就是Number,编译通过，运行出问题。
 
-- 当某个类型变量在整个参数列表的所有参数和返回值中的**多处被应用**了，如果调用方法时这么多处的实际应用类型*对应不同的类型,且使用有返回值*，则**优先考虑返回值的类型**
+-   当某个类型变量在整个参数列表的所有参数和返回值中的**多处被应用**
+    了，如果调用方法时这么多处的实际应用类型*对应不同的类型,且使用有返回值*，则**优先考虑返回值的类型**
 
-例如：
+    例如：
 
-`int x = add(3,3.5)` -> `static <T> T add(T a,T b)`
+    `int x = add(3,3.5)` -> `static <T> T add(T a,T b)`
 
-上例编译报错,x类型改为float也报错，改为Number成功。
+    上例编译报错,x类型改为float也报错，改为Number成功。
 
 
-- 参数类型的类型推断具有传递性
+-   参数类型的类型推断具有传递性
 
-例子：
+    例子：
 
-`copy(new Integer[5],new String[5])` -> `static <T> void copy(T []a,T []b)`
+    `copy(new Integer[5],new String[5])` -> `static <T> void copy(T []a,T []b)`
 
-该例推断实际参数类型为Object,编译通过.
+    该例推断实际参数类型为Object,编译通过.
 
- `copy(new ArrayList<String>,new Integer[5])` -> `static <T> void copy(Collection<T>a,T[]b)`
+    `copy(new ArrayList<String>,new Integer[5])` -> `static <T> void copy(Collection<T>a,T[]b)`
 
-该例则根据参数化的ArrayList类实例将类型变量直接确定为String类型，编译报错。
+    该例则根据参数化的ArrayList类实例将类型变量直接确定为String类型，编译报错。
 
 ----
 
 ##  自定义泛型类
+
 例子
 
 ```java
@@ -255,9 +263,11 @@ public class GenericDao<T>{
 }
 ```
 
-注意：当一个变量被声明为泛型时，只能被实例变量和方法调用(还有内嵌类型)，而不能被静态变量和静态方法调用。*因为静态成员是被所参数化的类所共享的，所以静态成员不应该有类级别的类型参数*。
+注意：当一个变量被声明为泛型时，只能被实例变量和方法调用(还有内嵌类型)，
+而不能被静态变量和静态方法调用。*因为静态成员是被所参数化的类所共享的，所以静态成员不应该有类级别的类型参数*。
 
 ### 泛型方法和泛型类的比较
+
 例子：
 
 ```java
@@ -291,6 +301,7 @@ public class A<T>(){
 ## 泛型和反射
 
 ### 通过反射获得泛型的实际类型参数
+
 把泛型变量当成方法的参数，利用Method类的getGenericParameterTypes方法来获取泛型的实际类型参数
 例子：
 
@@ -319,7 +330,6 @@ public class GenericTest {
     public static void applyMap(Map<Integer,String> map){
 
     }
-
 }
 ```
 
@@ -333,4 +343,3 @@ class java.lang.String
 ```
 
 作者[@brianway](http://brianway.github.io/)更多文章：[个人网站](http://brianway.github.io/) | [CSDN](http://blog.csdn.net/h3243212/) | [oschina](http://my.oschina.net/brianway)
-    

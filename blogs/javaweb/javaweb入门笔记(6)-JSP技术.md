@@ -15,9 +15,7 @@
   - [jsp映射和查错](#jsp映射和查错)
   - [jsp与JavaBean](#jsp与javabean)
 
-
-
-----
+---
 
 JSP：Java Server Pages，一种动态web资源的开发技术
 

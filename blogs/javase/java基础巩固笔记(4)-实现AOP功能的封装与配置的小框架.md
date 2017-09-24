@@ -6,18 +6,16 @@
 
 **Contents**
 
-- [java基础巩固笔记(4)-实现AOP功能的封装与配置的小框架](#java基础巩固笔记4-实现aop功能的封装与配置的小框架)
-  - [设计](#设计)
-- [xxx=java.util.ArrayList](#xxxjavautilarraylist)
-  - [代码](#代码)
-    - [`Advice`接口](#advice接口)
-    - [`MyAdvice`类](#myadvice类)
-    - [`BeanFactory`类](#beanfactory类)
-    - [`ProxyFactoryBean`类](#proxyfactorybean类)
-    - [`AopFrameWorkTest`类](#aopframeworktest类)
-  - [输出](#输出)
-
-
+-   [java基础巩固笔记(4)-实现AOP功能的封装与配置的小框架](#java基础巩固笔记4-实现aop功能的封装与配置的小框架)
+    -   [设计](#设计)
+-   [xxx=java.util.ArrayList](#xxxjavautilarraylist)
+    -   [代码](#代码)
+        -   [`Advice`接口](#advice接口)
+        -   [`MyAdvice`类](#myadvice类)
+        -   [`BeanFactory`类](#beanfactory类)
+        -   [`ProxyFactoryBean`类](#proxyfactorybean类)
+        -   [`AopFrameWorkTest`类](#aopframeworktest类)
+    -   [输出](#输出)
 
 ---
 
@@ -46,15 +44,11 @@ xxx.target=java.util.ArrayList
 
 包:`com.iot.proxy.aopframework`,有如下几个类/接口：
 
-- `BeanFactory`,用于读取配置文件，根据配置创建相应的对象
-- `ProxyFactoryBean`,用于生成代理对象，含有两个私有属性:目标和通知
-- `Advice`,通知接口，用于把切面的代码以**对象**的形式传递给InvocationHandler的的invoke方法
-- `MyAdvice`,`Advice`接口的一个实现类，打印执行方法前的时间及执行耗时
-- `AopFrameWorkTest`，测试效果
-
-
-
-
+-   `BeanFactory`,用于读取配置文件，根据配置创建相应的对象
+-   `ProxyFactoryBean`,用于生成代理对象，含有两个私有属性:目标和通知
+-   `Advice`,通知接口，用于把切面的代码以**对象**的形式传递给InvocationHandler的的invoke方法
+-   `MyAdvice`,`Advice`接口的一个实现类，打印执行方法前的时间及执行耗时
+-   `AopFrameWorkTest`，测试效果
 
 ## 代码
 
@@ -64,9 +58,7 @@ xxx.target=java.util.ArrayList
 package com.iot.proxy.aopframework;
 
 import java.lang.reflect.Method;
-/**
- * Created by brian on 2016/2/2.
- */
+
 public interface Advice {
     void beforeMethod(Method method);
     void aftereMethod(Method method);
@@ -80,9 +72,6 @@ package com.iot.proxy.aopframework;
 
 import java.lang.reflect.Method;
 
-/**
- * Created by brian on 2016/2/2.
- */
 public class MyAdvice implements Advice{
     long beginTime = 0 ;
     @Override
@@ -99,7 +88,6 @@ public class MyAdvice implements Advice{
 }
 ```
 
-
 ### `BeanFactory`类
 
 ```java
@@ -109,9 +97,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-/**
- * Created by brian on 2016/2/2.
- */
 public class BeanFactory {
     Properties properties = new Properties();
     public BeanFactory(InputStream inputStream){
@@ -122,7 +107,7 @@ public class BeanFactory {
         }
     }
 
-    public  Object getBean(String name){
+    public Object getBean(String name) {
         String className = properties.getProperty(name);
         Object bean = null;
         try {
@@ -169,9 +154,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-/**
- * Created by brian on 2016/2/3.
- */
 public class ProxyFactoryBean {
     private Object target;
     private Advice advice;
@@ -211,7 +193,6 @@ public class ProxyFactoryBean {
 }
 ```
 
-
 ### `AopFrameWorkTest`类
 
 ```java
@@ -220,9 +201,6 @@ package com.iot.proxy.aopframework;
 import java.io.InputStream;
 import java.util.Collection;
 
-/**
- * Created by brian on 2016/2/3.
- */
 public class AopFrameWorkTest {
     public static void main(String[] args) {
         InputStream inputStream = AopFrameWorkTest.class.getResourceAsStream("config.properties");
@@ -235,7 +213,7 @@ public class AopFrameWorkTest {
 
 ## 输出
 
-- 配置`xxx=com.iot.proxy.aopframework.ProxyFactoryBean`
+-   配置 `xxx=com.iot.proxy.aopframework.ProxyFactoryBean`
 
 输出为：
 
@@ -245,7 +223,7 @@ clear before at 0
 clear cost total 0
 ```
 
-- 配置`xxx=java.util.ArrayList`
+-   配置`xxx=java.util.ArrayList`
 
 输出为：
 
@@ -253,11 +231,8 @@ clear cost total 0
 java.util.ArrayList
 ```
 
+**可以看出，只改变配置文件，就可改变代码的运行结果，从而达到灵活的效果**
 
-可以看出，只改变配置文件，就可改变代码的运行结果，从而达到灵活的效果
-
-
-
-------
+---
 
 > 作者[@brianway](http://brianway.github.io/)更多文章：[个人网站](http://brianway.github.io/) | [CSDN](http://blog.csdn.net/h3243212/) | [oschina](http://my.oschina.net/brianway)

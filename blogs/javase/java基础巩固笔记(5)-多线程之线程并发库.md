@@ -6,24 +6,22 @@
 
 **Contents**
 
-- [java基础巩固笔记(5)-多线程之线程并发库](#java基础巩固笔记5-多线程之线程并发库)
-  - [原子性操作类](#原子性操作类)
-  - [线程池](#线程池)
-    - [常用线程池](#常用线程池)
-    - [Callable&Future](#callablefuture)
-  - [Lock&Condition](#lockcondition)
-    - [Lock](#lock)
-    - [Condition](#condition)
-  - [同步工具](#同步工具)
-  - [参考资料](#参考资料)
-
-
+-   [java基础巩固笔记(5)-多线程之线程并发库](#java基础巩固笔记5-多线程之线程并发库)
+    -   [原子性操作类](#原子性操作类)
+    -   [线程池](#线程池)
+        -   [常用线程池](#常用线程池)
+        -   [Callable&Future](#callablefuture)
+    -   [Lock&Condition](#lockcondition)
+        -   [Lock](#lock)
+        -   [Condition](#condition)
+    -   [同步工具](#同步工具)
+    -   [参考资料](#参考资料)
 
 ---
 
 本文主要概述`java.util.concurrent`包下的相关类和使用方法
 
-> [Package java.util.concurrent](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/concurrent/package-summary.html)
+>   [Package java.util.concurrent](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/concurrent/package-summary.html)
 
 ## 原子性操作类
 
@@ -235,9 +233,6 @@ class BoundedBuffer {
 >* [深入浅出 Java Concurrency (29): 线程池 part 2 Executor 以及Executors](http://www.blogjava.net/xylz/archive/2010/12/21/341281.html)
 >* [《深入浅出 Java Concurrency》目录](http://www.blogjava.net/xylz/archive/2010/07/08/325587.html)
 
-
-
-------
-
+----
 
 > 作者[@brianway](http://brianway.github.io/)更多文章：[个人网站](http://brianway.github.io/) | [CSDN](http://blog.csdn.net/h3243212/) | [oschina](http://my.oschina.net/brianway)
