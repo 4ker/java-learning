@@ -1,5 +1,7 @@
 package com.brianway.learning.java.base.constructor;
 
+import java.util.ArrayList;
+
 /**
  * Created by Brian on 2016/4/14.
  */

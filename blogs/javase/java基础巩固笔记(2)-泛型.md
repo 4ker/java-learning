@@ -7,78 +7,77 @@
 **Contents**
 
 - [java基础巩固笔记(2)-泛型](#java基础巩固笔记2-泛型)
-  - [术语](#术语)
-  - ["?"通配符](#通配符)
-    - [通配符的扩展](#通配符的扩展)
-  - [自定义泛型方法](#自定义泛型方法)
-    - ["擦除"实例](#擦除实例)
-    - [类型参数的类型推断](#类型参数的类型推断)
-  - [自定义泛型类](#自定义泛型类)
-    - [泛型方法和泛型类的比较](#泛型方法和泛型类的比较)
-  - [泛型和反射](#泛型和反射)
-    - [通过反射获得泛型的实际类型参数](#通过反射获得泛型的实际类型参数)
-
-
+    -   [术语](#术语)
+    -   ["?"通配符](#通配符)
+        -   [通配符的扩展](#通配符的扩展)
+    -   [自定义泛型方法](#自定义泛型方法)
+        -   ["擦除"实例](#擦除实例)
+        -   [类型参数的类型推断](#类型参数的类型推断)
+    -   [自定义泛型类](#自定义泛型类)
+        -   [泛型方法和泛型类的比较](#泛型方法和泛型类的比较)
+    -   [泛型和反射](#泛型和反射)
+        -   [通过反射获得泛型的实际类型参数](#通过反射获得泛型的实际类型参数)
 
 ---
 
 本文对泛型的基本知识进行较为全面的总结，并附上简短的代码实例，加深记忆。
 
-
 泛型：将集合中的元素限定为一个特定的类型。
 
 ## 术语
 
-- `ArrayList<E>` -- 泛型类型
-- `ArrayList` -- 原始类型
-- `E` -- 类型参数
-- `<>` -- 读作"typeof"
-- `ArrayList<Integer>` -- 参数化的类型
-- `Integer` -- 实际类型参数
+-   `ArrayList<E>` -- 泛型类型
+-   `ArrayList` -- 原始类型
+-   `E` -- 类型参数
+-   `<>` -- 读作 "typeof"
+-   `ArrayList<Integer>` -- 参数化的类型
+-   `Integer` -- 实际类型参数
 
 几点注意：
 
-- 参数化类型和原始类型相互兼容
+-   参数化类型和原始类型相互兼容
 
-```java
-ArrayList  collection1 = new ArrayList<Integer>();//通过,无warning
-ArrayList<Integer> collection2 = new ArrayList();//通过,有warning
-```
+    ```java
+    ArrayList collection1 = new ArrayList<Integer>();   // 通过,无warning
+    ArrayList<Integer> collection2 = new ArrayList();   // 通过,有warning
+    ```
 
-- 参数化类型不考虑类型参数的继承关系
+-   参数化类型不考虑类型参数的继承关系
 
-```java
-ArrayList<String> collection3 = new ArrayList<Object>();//编译不通过
-ArrayList<Object> collection4 = new ArrayList<String>();//编译不通过
-```
+    ```java
+    ArrayList<String> collection3 = new ArrayList<Object>(); // 编译不通过
+    ArrayList<Object> collection4 = new ArrayList<String>(); // 编译不通过
+    ```
 
-但是
+    但是
 
-```java
-ArrayList collection5 = new ArrayList<Integer>();
-ArrayList<String> collection6 = collection5;//编译通过
-```
+    ```java
+    ArrayList collection5 = new ArrayList<Integer>();
+    ArrayList<String> collection6 = collection5; //编译通过
+    ```
 
 ---
 
 ## "?"通配符
-"?"表示任意类型，使用"?"通配符可以引用各种参数化的类型，可以调用与参数化无关的方法(如size()方法)，不能调用与参数化有关的方法(如add()方法)
+
+"?"表示任意类型，使用"?"通配符可以引用各种参数化的类型，可以调用与参数化无关的方法(如size()方法)，
+不能调用与参数化有关的方法(如add()方法)
     
 ### 通配符的扩展
 
-- 限定通配符的上边界
+-   限定通配符的上边界: extends
 
-```java
-ArrayList<? extends Number > collection1= new ArrayList<Integer >();//编译通过
-ArrayList<? extends Number > collection2= new ArrayList<String>();//编译不通过
-```
+    ```java
+    ArrayList<? extends Number> collection1= new ArrayList<Integer >();//编译通过
+    ArrayList<? extends Number> collection2= new ArrayList<String>();//编译不通过
+    ```
 
-- 限定通配符的下边界
+- 限定通配符的下边界: super
 
-```java
-ArrayList<? super Integer > collection3= new ArrayList<Number >();//编译通过
-ArrayList<? super Integer > collection4= new ArrayList<String>();//编译不通过
-```
+    ```java
+    ArrayList<? super Integer > collection3= new ArrayList<Number >();//编译通过
+    ArrayList<? super Integer > collection4= new ArrayList<String>();//编译不通过
+    ```
 
 ---
 
